@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#DCE6F7">
+<title>Kraampje de Blauwe Bes</title>
+<meta name="description" content="Het zelfverzonnen stripverhaal over Kraampje de Blauwe Bes, met spelletjes en een bessenmaker.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-60 -66 120 120'%3E%3Ccircle r='52' fill='%233346A8' stroke='%23121633' stroke-width='5'/%3E%3Cpath d='M0 -61 L4 -52 L14 -52 L6 -45 L9 -36 L0 -41 L-9 -36 L-6 -45 L-14 -52 L-4 -52Z' fill='%2316236B'/%3E%3Ccircle cx='-17' cy='-2' r='8' fill='%23fff'/%3E%3Ccircle cx='17' cy='-2' r='8' fill='%23fff'/%3E%3Cpath d='M-14 16 q14 14 28 0' stroke='%23fff' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+/* Layout: stripvellen met dikke inktranden op een hemelsblauwe ondergrond; elk onderdeel is een eigen "vel" met een verschoven schaduw. */
+:root {
+  --bg: #DCE6F7; --paper: #FFFDF6; --ink: #121633; --ui: #121633; --muted: #4A5380;
+  --berry: #3346A8; --caption: #FFE27A; --pop: #E8445A; --leaf: #4E9A3A; --rule: #B5C1E3;
+  --display: "Arial Black", "Arial Rounded MT Bold", "Helvetica Neue", Impact, sans-serif;
+  --bubble: "Comic Sans MS", "Comic Neue", "Chalkboard SE", "Marker Felt", "Segoe Print", sans-serif;
+  --body: ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #0E1330; --ui: #EEF1FF; --muted: #A9B2DA; --rule: #2A3366; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #0E1330; --ui: #EEF1FF; --muted: #A9B2DA; --rule: #2A3366; color-scheme: dark; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+body { margin: 0; background: var(--bg); color: var(--ui); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--pop); outline-offset: 3px; }
+h1, h2 { font-family: var(--display); font-weight: 900; letter-spacing: .01em; line-height: 1; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+
+/* ---------- Kop ---------- */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); border-bottom: 3px solid var(--ink); }
+.top-in { max-width: 1040px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; gap: 12px; }
+.logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ui); font-family: var(--display); font-size: 17px; margin-right: auto; border: 0; background: none; padding: 0; cursor: pointer; }
+.logo svg { width: 36px; height: 42px; }
+.logo span { white-space: nowrap; }
+.nav { display: flex; gap: 2px; list-style: none; margin: 0; padding: 0; }
+.nav a { display: block; padding: 7px 11px; border-radius: 999px; text-decoration: none; color: var(--ui); font-weight: 800; font-size: 15px; }
+.nav a:hover { background: var(--caption); color: var(--ink); }
+.geluid { width: 42px; height: 42px; border-radius: 50%; border: 3px solid var(--ink); background: var(--paper); color: var(--ink); display: grid; place-items: center; cursor: pointer; flex: none; padding: 0; }
+.geluid svg { width: 20px; height: 20px; }
+.geluid[aria-pressed="true"] { background: var(--caption); }
+@media (max-width: 760px) { .logo span { display: none; } .nav a { padding: 7px 8px; font-size: 14px; } }
+@media (max-width: 380px) { .nav a { padding: 6px 5px; font-size: 13px; } }
+
+/* ---------- Algemeen ---------- */
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 40px; display: grid; gap: 48px; }
+.blok { display: grid; gap: 16px; }
+.blok-kop { display: flex; align-items: end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.blok-kop h2 { font-size: clamp(28px, 5vw, 42px); color: var(--berry); text-shadow: 3px 3px 0 var(--caption); }
+.blok-kop p { color: var(--muted); max-width: 52ch; }
+.vel { position: relative; background: var(--paper); color: var(--ink); border: 4px solid var(--ink); border-radius: 6px; box-shadow: 8px 8px 0 var(--ink); overflow: hidden; }
+.knop { font-weight: 800; border: 3px solid var(--ink); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 9px 18px; box-shadow: 3px 3px 0 var(--ink); cursor: pointer; }
+.knop:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+.knop:disabled { opacity: .4; cursor: default; }
+.knop.hoofd { background: var(--berry); color: #fff; }
+.knop.geel { background: var(--caption); }
+.tip { color: var(--muted); font-size: 15px; }
+kbd { font-family: var(--body); font-weight: 800; font-size: 14px; border: 1px solid var(--rule); border-radius: 4px; padding: 0 6px; }
+
+/* ---------- Tekstwolken (gedeeld) ---------- */
+.wolk { position: absolute; max-width: 42%; padding: .55em .85em; font-family: var(--bubble); font-weight: 700; font-size: clamp(12px, 2.2vw, 19px); line-height: 1.2; color: var(--ink); text-align: center;
+  background: #fff; border: 3px solid var(--ink); border-radius: 50% / 45%; transform: scale(0); transform-origin: var(--ox, 50%) 100%; opacity: 0; pointer-events: none; z-index: 2; }
+.wolk.zichtbaar { animation: plop .42s cubic-bezier(.3,1.6,.5,1) forwards; }
+.wolk.al { transform: scale(1); opacity: 1; animation: none; }
+@keyframes plop { 0% { transform: scale(0); opacity: 0; } 60% { opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+.praat::before, .praat::after { content: ""; position: absolute; width: 0; height: 0; border-style: solid; }
+.praat.links::before  { left: 18%;  bottom: -22px; border-width: 22px 14px 0 0; border-color: var(--ink) transparent transparent transparent; }
+.praat.links::after   { left: calc(18% + 4px); bottom: -14px; border-width: 15px 9px 0 0; border-color: #fff transparent transparent transparent; }
+.praat.rechts::before { right: 18%; bottom: -22px; border-width: 22px 0 0 14px; border-color: var(--ink) transparent transparent transparent; }
+.praat.rechts::after  { right: calc(18% + 4px); bottom: -14px; border-width: 15px 0 0 9px; border-color: #fff transparent transparent transparent; }
+.denk { border: 0; box-shadow: 0 0 0 3px var(--ink) inset; border-radius: 46%; }
+.denk i { position: absolute; border: 3px solid var(--ink); background: #fff; border-radius: 50%; }
+.denk i:nth-child(1) { width: 16px; height: 16px; bottom: -20px; left: 22%; }
+.denk i:nth-child(2) { width: 10px; height: 10px; bottom: -34px; left: 16%; }
+.roep { border: 0; border-radius: 0; background: var(--caption); font-family: var(--display); font-size: clamp(18px, 4vw, 34px); padding: 1.1em 1.4em;
+  clip-path: polygon(50% 0, 60% 14%, 78% 4%, 76% 22%, 98% 20%, 86% 38%, 100% 52%, 84% 60%, 94% 80%, 74% 76%, 70% 98%, 56% 82%, 44% 100%, 38% 80%, 18% 94%, 22% 72%, 0 70%, 14% 54%, 2% 36%, 20% 32%, 12% 10%, 34% 16%); }
+.kader { border-radius: 2px; background: var(--caption); font-style: italic; text-align: left; box-shadow: 3px 3px 0 var(--ink); }
+
+/* ---------- Kraampje ---------- */
+.hero { display: grid; gap: 6px; }
+.hero h1 { font-size: clamp(36px, 8vw, 72px); color: var(--berry); text-shadow: 4px 4px 0 var(--caption); }
+.hero p { color: var(--muted); max-width: 56ch; }
+.scene { --lucht: #BFE3FF; --grond: #C7A27A; --lamp: #FFF3C4; }
+.scene.nacht { --lucht: #1B2250; --grond: #5A4636; --lamp: #FFD866; }
+.scene svg.decor { display: block; width: 100%; height: auto; aspect-ratio: 1000 / 600; }
+.lucht { fill: var(--lucht); transition: fill .9s; }
+.grond { fill: var(--grond); transition: fill .9s; }
+.sterren { opacity: 0; transition: opacity .9s; }
+.nacht .sterren { opacity: 1; }
+.zon { fill: #FFD34D; transition: fill .9s; cursor: pointer; }
+.nacht .zon { fill: #F4F0D6; }
+.maanhap { fill: var(--lucht); opacity: 0; transition: opacity .9s, fill .9s; pointer-events: none; }
+.nacht .maanhap { opacity: 1; }
+.gloed { opacity: 0; transition: opacity .9s; }
+.nacht .gloed { opacity: .85; }
+.peer { fill: var(--lamp); transition: fill .9s; }
+.figuur:focus { outline: none; }
+.figuur:focus-visible { outline: 3px solid var(--pop); }
+.figuur { cursor: pointer; transform-box: fill-box; transform-origin: 50% 100%; }
+.figuur.hop { animation: hop .6s cubic-bezier(.3,1.4,.5,1); }
+@keyframes hop { 0% { transform: translateY(0) scale(1); } 25% { transform: translateY(0) scale(1.08, .9); } 55% { transform: translateY(-34px) scale(.95, 1.06); } 100% { transform: translateY(0) scale(1); } }
+.scene-bediening { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+/* ---------- Strip ---------- */
+.strip { touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: pointer; }
+.baan { display: flex; transition: transform .45s cubic-bezier(.6,.05,.3,1); }
+.plaatje { position: relative; flex: 0 0 100%; aspect-ratio: 4 / 3; max-width: 100%; }
+.plaatje > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.nr { position: absolute; right: 10px; bottom: 8px; font-family: var(--display); font-size: 18px; color: var(--ink); opacity: .5; }
+.strip-bediening { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.stippen { display: flex; gap: 8px; }
+.stippen button { width: 14px; height: 14px; padding: 0; border-radius: 50%; border: 2px solid var(--ui); background: transparent; cursor: pointer; }
+.stippen button[aria-current="true"] { background: var(--berry); border-color: var(--berry); }
+
+/* ---------- Spel ---------- */
+.spel { aspect-ratio: 8 / 5; max-width: 100%; }
+.spel canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.spel-menu { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(18, 22, 51, .55); padding: 16px; }
+.spel-kaart { background: var(--paper); color: var(--ink); border: 4px solid var(--ink); border-radius: 6px; box-shadow: 6px 6px 0 var(--ink); padding: clamp(14px, 3vw, 26px); display: grid; gap: 12px; max-width: 460px; width: 100%; text-align: center; }
+.spel-kaart h3 { font-family: var(--display); font-size: clamp(22px, 4vw, 32px); margin: 0; color: var(--berry); }
+.spel-kaart p { font-size: clamp(13px, 2vw, 16px); color: #3A4170; }
+.spel-knoppen { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.spel-uitleg { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.spel-uitleg div { border: 2px dashed var(--rule); border-radius: 8px; padding: 10px 14px; font-size: 15px; color: var(--muted); }
+.spel-uitleg b { color: var(--ui); }
+@media (max-width: 520px) { .spel { aspect-ratio: 4 / 5; } }
+
+/* ---------- Bessenmaker ---------- */
+.maker { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 0; }
+.maker-beeld { display: grid; place-items: center; align-content: center; gap: 10px; padding: 24px; background: repeating-linear-gradient(45deg, #EAF1FF 0 14px, #F6F9FF 14px 28px); border-right: 4px solid var(--ink); }
+.maker-beeld .groot { width: min(260px, 70%); }
+.maker-beeld .groot svg { width: 100%; height: auto; display: block; }
+.naambord { font-family: var(--display); font-size: 22px; background: var(--caption); border: 3px solid var(--ink); padding: 4px 14px; border-radius: 4px; box-shadow: 3px 3px 0 var(--ink); min-height: 1.6em; }
+.maker-keuzes { padding: 20px; display: grid; gap: 16px; align-content: start; min-width: 0; }
+fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; min-width: 0; }
+legend { font-weight: 800; padding: 0; margin-bottom: 6px; }
+.keuzes { display: flex; flex-wrap: wrap; gap: 8px; }
+.keuzes label { position: relative; cursor: pointer; }
+.keuzes input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.keuzes .chip { display: grid; place-items: center; gap: 2px; border: 2px solid var(--rule); border-radius: 10px; padding: 4px 6px; min-width: 58px; font-size: 12px; font-weight: 700; background: #fff; color: var(--ink); }
+.keuzes .chip svg { width: 40px; height: 52px; display: block; }
+.keuzes input:checked + .chip { border-color: var(--ink); background: var(--caption); box-shadow: 2px 2px 0 var(--ink); }
+.keuzes input:focus-visible + .chip { outline: 3px solid var(--pop); outline-offset: 2px; }
+.kleur-bol { width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--ink); display: block; }
+.naamveld { font: inherit; border: 3px solid var(--ink); border-radius: 8px; padding: 8px 12px; width: 100%; max-width: 320px; background: #fff; color: var(--ink); }
+.maker-knoppen { display: flex; gap: 10px; flex-wrap: wrap; }
+@media (max-width: 720px) { .maker { grid-template-columns: minmax(0, 1fr); } .maker-beeld { border-right: 0; border-bottom: 4px solid var(--ink); } }
+
+/* ---------- Voet ---------- */
+footer { border-top: 3px solid var(--ink); }
+.voet { max-width: 1040px; margin: 0 auto; padding: 22px 16px 36px; display: grid; gap: 6px; color: var(--muted); font-size: 15px; }
+.voet strong { color: var(--ui); }
+
+/* ---------- Bessenregen ---------- */
+#regen { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 50; pointer-events: none; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); z-index: 60; background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; font-weight: 800; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .baan { transition: none; }
+  .wolk.zichtbaar { animation: none; transform: scale(1); opacity: 1; }
+  .figuur.hop { animation: none; }
+}
+</style>
+</head>
+<body>
+
+
+<canvas id="regen" aria-hidden="true"></canvas>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<header class="top">
+  <div class="top-in">
+    <button class="logo" id="logo" type="button" aria-label="Kraampje de Blauwe Bes, naar boven"><span id="logoBes"></span><span>De Blauwe Bes</span></button>
+    <ul class="nav">
+      <li><a href="#kraampje">Kraampje</a></li>
+      <li><a href="#strip">Strip</a></li>
+      <li><a href="#spelen">Spelen</a></li>
+      <li><a href="#maker">Maker</a></li>
+    </ul>
+    <button class="geluid" id="geluid" type="button" aria-pressed="false" aria-label="Geluid aan"></button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="blok" id="kraampje" aria-labelledby="titel">
+    <div class="hero">
+      <h1 id="titel">Kraampje de Blauwe Bes</h1>
+      <p>Tik op de bessen in het kraampje en kijk wat ze doen. Tik op de zon of de maan om het dag of nacht te maken.</p>
+    </div>
+    <div class="vel scene" id="scene"></div>
+    <div class="scene-bediening">
+      <button class="knop" id="dagnacht" type="button">Maak het nacht</button>
+      <span class="tip" id="klokTip"></span>
+    </div>
+  </section>
+
+  <section class="blok" id="strip" aria-labelledby="strip-h">
+    <div class="blok-kop">
+      <h2 id="strip-h">De strip</h2>
+      <p>Aflevering 1: Eén knikker te weinig. Tik op het plaatje voor de volgende tekstwolk.</p>
+    </div>
+    <div class="vel strip" id="vel" role="region" aria-roledescription="strip" aria-label="Stripverhaal, plaatje voor plaatje" tabindex="0">
+      <div class="baan" id="baan"></div>
+    </div>
+    <div class="strip-bediening">
+      <button class="knop" id="terug" type="button">◀ Terug</button>
+      <div class="stippen" id="stippen" aria-label="Kies een plaatje"></div>
+      <button class="knop hoofd" id="verder" type="button">Verder ▶</button>
+    </div>
+    <p class="tip">Veeg, tik, of gebruik <kbd>→</kbd> en <kbd>←</kbd>.</p>
+  </section>
+
+  <section class="blok" id="spelen" aria-labelledby="spel-h">
+    <div class="blok-kop">
+      <h2 id="spel-h">Vang de bessen</h2>
+      <p>Vang de blauwe bessen in je mandje. Gouden bessen zijn extra veel waard. Pas op voor de rotte!</p>
+    </div>
+    <div class="vel spel" id="spel">
+      <canvas id="spelDoek" aria-label="Speelveld van Vang de bessen"></canvas>
+      <div class="spel-menu" id="spelMenu">
+        <div class="spel-kaart">
+          <h3 id="menuTitel">Klaar om te vangen?</h3>
+          <p id="menuTekst">Kies of je alleen speelt of met z'n tweeën op dit scherm.</p>
+          <div class="spel-knoppen">
+            <button class="knop hoofd" id="start1" type="button">1 speler</button>
+            <button class="knop geel" id="start2" type="button">2 spelers</button>
+          </div>
+          <p class="tip" id="recordTekst"></p>
+        </div>
+      </div>
+    </div>
+    <div class="spel-uitleg">
+      <div><b>1 speler:</b> beweeg met <kbd>←</kbd> <kbd>→</kbd> of sleep met je vinger. Je hebt 3 hartjes; een rotte bes kost er één.</div>
+      <div><b>2 spelers:</b> speler 1 met <kbd>A</kbd> <kbd>D</kbd> of de linkerhelft, speler 2 met <kbd>←</kbd> <kbd>→</kbd> of de rechterhelft. Wie heeft na 60 seconden de meeste punten?</div>
+    </div>
+  </section>
+
+  <section class="blok" id="maker" aria-labelledby="maker-h">
+    <div class="blok-kop">
+      <h2 id="maker-h">Bessenmaker</h2>
+      <p>Maak je eigen bes voor in het kraampje: kies een kleur, een gezichtje en een hoedje.</p>
+    </div>
+    <div class="vel maker">
+      <div class="maker-beeld">
+        <div class="groot" id="makerBeeld"></div>
+        <div class="naambord" id="naambord">Bessie</div>
+      </div>
+      <form class="maker-keuzes" id="makerForm" autocomplete="off">
+        <fieldset><legend>Kleur</legend><div class="keuzes" id="kiesKleur"></div></fieldset>
+        <fieldset><legend>Gezichtje</legend><div class="keuzes" id="kiesGezicht"></div></fieldset>
+        <fieldset><legend>Hoedje</legend><div class="keuzes" id="kiesHoed"></div></fieldset>
+        <fieldset><legend><label for="naam">Naam van je bes</label></legend><input class="naamveld" id="naam" name="naam" maxlength="18" value="Bessie"></fieldset>
+        <div class="maker-knoppen">
+          <button class="knop geel" id="verras" type="button">Verras me!</button>
+          <button class="knop hoofd" id="bewaar" type="button">Bewaar als plaatje</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="voet">
+    <p><strong>Kraampje de Blauwe Bes</strong> is een zelfverzonnen stripverhaal.</p>
+    <p>Deze site verzamelt geen gegevens: geen tellers, geen cookies van anderen. Je record en je geluidsknop worden alleen op je eigen apparaat onthouden.</p>
+    <p>Geheime tip: typ <kbd>b</kbd> <kbd>e</kbd> <kbd>s</kbd> op je toetsenbord, of tik vijf keer snel op het logo.</p>
+  </div>
+</footer>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const opslag = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+const rustig = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const kies = a => a[Math.floor(Math.random() * a.length)];
+function toast(t) { const el = $("#toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2200); }
+
+/* =====================================================================
+   DE BES. Eén tekenfunctie voor het hele verhaal: kraampje, strip, spel en maker.
+   ===================================================================== */
+const KLEUREN = {
+  blauw: { naam: "Blauw", c: ["#7387D8", "#3346A8", "#1A2366"] },
+  nacht: { naam: "Nachtblauw", c: ["#4B5AA8", "#1E2A6E", "#0D1340"] },
+  paars: { naam: "Paars", c: ["#A47DDB", "#6B3FA0", "#3A1D63"] },
+  ijs:   { naam: "IJsblauw", c: ["#C4DCFF", "#6F9BE0", "#34589E"] },
+  goud:  { naam: "Goud", c: ["#FFF0A8", "#F5C542", "#A9780A"] },
+  rot:   { naam: "Rot", c: ["#B7BE7C", "#7A7A40", "#3E3A22"] }
+};
+const MAKERKLEUREN = ["blauw", "nacht", "paars", "ijs"];
+
+function ster(cx, cy, R, r) {
+  let d = "";
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r : R; d += (i ? "L" : "M") + (cx + Math.cos(a) * rr).toFixed(1) + " " + (cy + Math.sin(a) * rr).toFixed(1); }
+  return d + "Z";
+}
+const oog = (x, y) => `<ellipse cx="${x}" cy="${y}" rx="8" ry="10" fill="#fff"/><circle cx="${x + 1.5}" cy="${y + 1.5}" r="5" fill="#0B0F26"/><circle cx="${x + 3}" cy="${y - 1.5}" r="2" fill="#fff"/>`;
+const dicht = (x, y) => `<path d="M${x - 7} ${y + 2} q7 -9 14 0" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+const lijn = d => `<path d="${d}" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+const smile = lijn("M-14 16 q14 14 28 0");
+const wangen = `<ellipse cx="-31" cy="12" rx="7" ry="4" fill="#FF7AA8" opacity=".65"/><ellipse cx="31" cy="12" rx="7" ry="4" fill="#FF7AA8" opacity=".65"/>`;
+const hart = (x, y) => `<path d="M${x} ${y + 7} C${x - 12} ${y - 1} ${x - 6} ${y - 11} ${x} ${y - 4} C${x + 6} ${y - 11} ${x + 12} ${y - 1} ${x} ${y + 7}Z" fill="#FF3D6E"/>`;
+const GEZICHTEN = {
+  blij:     { naam: "Blij",     svg: oog(-17, -2) + oog(17, -2) + smile },
+  lach:     { naam: "Lachen",   svg: dicht(-17, -2) + dicht(17, -2) + `<path d="M-16 13 h32 a16 16 0 0 1 -32 0z" fill="#fff"/>` },
+  knipoog:  { naam: "Knipoog",  svg: oog(-17, -2) + dicht(17, -2) + smile + wangen },
+  verbaasd: { naam: "Verbaasd", svg: oog(-17, -5) + oog(17, -5) + `<ellipse cy="22" rx="6" ry="8" fill="#0B0F26" stroke="#fff" stroke-width="3"/>` },
+  tong:     { naam: "Tong",     svg: dicht(-17, -2) + dicht(17, -2) + smile + `<ellipse cx="3" cy="26" rx="6" ry="7" fill="#FF6B8F"/>` },
+  hartjes:  { naam: "Verliefd", svg: hart(-17, -2) + hart(17, -2) + smile },
+  slaperig: { naam: "Slaperig", svg: lijn("M-24 -2 h14 M10 -2 h14") + `<circle cy="22" r="4" fill="#fff"/><text x="24" y="-20" font-size="17" font-weight="900" fill="#fff" font-family="sans-serif">z</text>` },
+  cool:     { naam: "Cool",     svg: `<g fill="#0B0F26"><ellipse cx="-17" cy="-2" rx="13" ry="9"/><ellipse cx="17" cy="-2" rx="13" ry="9"/><rect x="-6" y="-7" width="12" height="3"/></g><circle cx="-21" cy="-5" r="3" fill="#fff" opacity=".6"/><circle cx="13" cy="-5" r="3" fill="#fff" opacity=".6"/>` + lijn("M-8 20 q12 8 20 -4") },
+  sip:      { naam: "Sip",      svg: oog(-17, -2) + oog(17, -2) + lijn("M-11 24 q11 -10 22 0") },
+  verlegen: { naam: "Verlegen", svg: oog(-17, 1) + oog(17, 1) + wangen + lijn("M-7 20 q7 6 14 0") }
+};
+const HOEDEN = {
+  geen:  { naam: "Geen", svg: "" },
+  kroon: { naam: "Kroon", svg: `<path d="M-24 -54 L-24 -80 L-12 -68 L0 -88 L12 -68 L24 -80 L24 -54Z" fill="#F5C542" stroke="#121633" stroke-width="3" stroke-linejoin="round"/><circle cy="-64" r="4.5" fill="#E8445A" stroke="#121633" stroke-width="1.5"/>` },
+  koks:  { naam: "Kokshoed", svg: `<path d="M-24 -46 v-18 a15 15 0 0 1 2 -29 a17 17 0 0 1 44 0 a15 15 0 0 1 2 29 v18z" fill="#fff" stroke="#121633" stroke-width="3" stroke-linejoin="round"/><path d="M-24 -54 h48" stroke="#121633" stroke-width="2"/>` },
+  pet:   { naam: "Pet", svg: `<path d="M-40 -42 a40 34 0 0 1 80 0z" fill="#E8445A" stroke="#121633" stroke-width="3"/><path d="M30 -44 q30 0 34 10 h-36z" fill="#C2334A" stroke="#121633" stroke-width="3" stroke-linejoin="round"/><circle cy="-75" r="4.5" fill="#121633"/>` },
+  strik: { naam: "Strik", svg: `<g transform="translate(32 -40) rotate(20)"><path d="M0 0 L-19 -11 L-19 11Z M0 0 L19 -11 L19 11Z" fill="#FF7AA8" stroke="#121633" stroke-width="3" stroke-linejoin="round"/><circle r="5.5" fill="#E8445A" stroke="#121633" stroke-width="2"/></g>` },
+  feest: { naam: "Feesthoed", svg: `<path d="M-17 -48 L0 -94 L17 -48Z" fill="#4E9A3A" stroke="#121633" stroke-width="3" stroke-linejoin="round"/><circle cy="-94" r="5.5" fill="#F5C542" stroke="#121633" stroke-width="2"/><circle cx="-4" cy="-64" r="3.5" fill="#F5C542"/><circle cx="5" cy="-56" r="3.5" fill="#E8445A"/><circle cx="2" cy="-76" r="3" fill="#fff"/>` }
+};
+let uid = 0;
+/* viewBox: bes met straal 52 rond (0,0), ruimte erboven voor kroontje en hoedje */
+const VB = { x: -64, y: -100, w: 128, h: 164 };
+function besSVG({ kleur = "blauw", gezicht = "blij", hoed = "geen", w, h, x, y, extra = "" } = {}) {
+  const id = "bg" + (++uid), c = KLEUREN[kleur].c;
+  const maat = w ? `width="${w}" height="${h || w * VB.h / VB.w}"` : "";
+  const pos = x !== undefined ? `x="${x}" y="${y}"` : "";
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${VB.x} ${VB.y} ${VB.w} ${VB.h}" ${maat} ${pos} ${extra}>
+    <defs><radialGradient id="${id}" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="${c[0]}"/><stop offset=".6" stop-color="${c[1]}"/><stop offset="1" stop-color="${c[2]}"/></radialGradient></defs>
+    <circle r="52" fill="url(#${id})" stroke="#121633" stroke-width="4"/>
+    <ellipse cx="-31" cy="-22" rx="7" ry="12" fill="#fff" opacity=".4" transform="rotate(30 -31 -22)"/>
+    <path d="${ster(0, -47, 15, 6.5)}" fill="#16236B" stroke="#0B1240" stroke-width="3" stroke-linejoin="round"/><circle cy="-47" r="3.5" fill="#2E3F9E"/>
+    <g transform="translate(0 6)">${GEZICHTEN[gezicht].svg}</g>
+    ${HOEDEN[hoed].svg}
+  </svg>`;
+}
+/* bes als plaatje voor het canvas (spel en bessenregen) */
+const plaatjes = new Map();
+function besPlaatje(kleur, gezicht) {
+  const k = kleur + "|" + gezicht;
+  if (plaatjes.has(k)) return plaatjes.get(k);
+  const img = new Image();
+  img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(besSVG({ kleur, gezicht, w: 128 }));
+  plaatjes.set(k, img);
+  return img;
+}
+const klaar = img => img.complete && img.naturalWidth > 0;
+function laadAlles(lijst) { return Promise.all(lijst.map(img => img.complete ? 1 : new Promise(r => { img.addEventListener("load", r, { once: true }); img.addEventListener("error", r, { once: true }); }))); }
+
+$("#logoBes").innerHTML = besSVG({ gezicht: "blij", w: 36 });
+
+/* =====================================================================
+   GELUID. Zelf gemaakte piepjes, geen geluidsbestanden. Staat standaard uit.
+   ===================================================================== */
+const geluid = (() => {
+  let ac = null, aan = opslag.get("bes-geluid") === "1";
+  const knop = $("#geluid");
+  const ICOON_AAN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M19 5.5a9 9 0 0 1 0 13"/></svg>`;
+  const ICOON_UIT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg>`;
+  function teken() { knop.innerHTML = aan ? ICOON_AAN : ICOON_UIT; knop.setAttribute("aria-pressed", String(aan)); knop.setAttribute("aria-label", aan ? "Geluid uit" : "Geluid aan"); }
+  function ctx() { if (!ac) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; ac = new A(); } if (ac.state === "suspended") ac.resume(); return ac; }
+  function piep(f1, f2, duur, type = "sine", vol = .18, wacht = 0) {
+    if (!aan) return; const c = ctx(); if (!c) return;
+    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + wacht;
+    o.type = type; o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(f2, t + duur);
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + duur);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t + duur + .03);
+  }
+  knop.addEventListener("click", () => { aan = !aan; opslag.set("bes-geluid", aan ? "1" : "0"); teken(); if (aan) { ctx(); piep(500, 900, .12); } });
+  teken();
+  return {
+    plop: () => piep(620, 180, .16),
+    giechel: () => [0, .07, .14, .21].forEach((d, i) => piep(880 + i * 110, 1040 + i * 110, .06, "triangle", .14, d)),
+    vang: () => piep(520, 1040, .1, "square", .06),
+    goud: () => [0, .08, .16].forEach((d, i) => piep([660, 830, 990][i], [660, 830, 990][i] * 1.02, .14, "triangle", .14, d)),
+    au: () => piep(240, 90, .32, "sawtooth", .08),
+    tada: () => [0, .12, .24, .36].forEach((d, i) => piep([523, 659, 784, 1046][i], [523, 659, 784, 1046][i], .22, "triangle", .14, d)),
+    zoef: () => piep(300, 1200, .25, "sine", .1)
+  };
+})();
+
+/* =====================================================================
+   BESSENREGEN. Bij het eerste bezoek (per sessie), via de geheime code, of 5x tikken op het logo.
+   ===================================================================== */
+const regen = (() => {
+  const cv = $("#regen"), ctx = cv.getContext("2d");
+  const faces = Object.keys(GEZICHTEN).filter(g => g !== "sip");
+  const imgs = faces.map(g => besPlaatje("blauw", g));
+  let W, H, dpr, bessen = [], start = 0, vorige = 0, raf = 0, bezig = false;
+  const DUUR = 5000, UIT = 900;
+  function maat() { dpr = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+  function maak() {
+    const n = Math.round(Math.max(40, W / 1000 * 95)), basis = Math.max(13, Math.min(22, W / 55));
+    bessen = Array.from({ length: n }, () => {
+      const r = Math.round(basis * (.8 + Math.random() * .45));
+      return { r, img: kies(imgs), x: -r - Math.random() * W * .35, y: -r - Math.random() * H * .6, vx: 260 + Math.random() * 320, vy: Math.random() * 120, fase: Math.random() * 6.28, wacht: Math.random() * 1400, hoek: 0 };
+    });
+  }
+  function stap(dt, t) {
+    for (const b of bessen) {
+      if (t < b.wacht) continue;
+      b.vy += 1500 * dt; b.x += b.vx * dt; b.y += b.vy * dt;
+      if (b.y > H - b.r) { b.y = H - b.r; b.vy = Math.abs(b.vy) > 120 ? -b.vy * .45 : 0; b.vx *= .985; }
+      b.hoek = Math.sin(b.x / (b.r * 1.6) + b.fase) * .5;
+    }
+    for (let i = 0; i < bessen.length; i++) { const a = bessen[i]; if (t < a.wacht) continue;
+      for (let j = i + 1; j < bessen.length; j++) { const b = bessen[j]; if (t < b.wacht) continue;
+        const dx = b.x - a.x, dy = b.y - a.y, min = a.r + b.r, d2 = dx * dx + dy * dy;
+        if (d2 > 0 && d2 < min * min) { const d = Math.sqrt(d2), o = (min - d) / 2, nx = dx / d, ny = dy / d;
+          a.x -= nx * o; a.y -= ny * o; b.x += nx * o; b.y += ny * o;
+          const rel = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny; if (rel < 0) { const k = rel * .8; a.vx += k * nx; a.vy += k * ny; b.vx -= k * nx; b.vy -= k * ny; } } } }
+  }
+  function teken(alpha) {
+    ctx.clearRect(0, 0, W, H); ctx.globalAlpha = alpha;
+    for (const b of bessen) {
+      if (b.x < -b.r * 2 || b.x > W + b.r * 2) continue;
+      const s = b.r * 2 * VB.w / 104, hh = s * VB.h / VB.w;   // straal 52 in viewBox van 128 breed
+      ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.hoek);
+      ctx.drawImage(b.img, -s / 2, -hh * (-VB.y) / VB.h, s, hh); ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+  }
+  function frame(nu) {
+    const t = nu - start, dt = Math.min(.033, (nu - vorige) / 1000); vorige = nu;
+    stap(dt, t); teken(t > DUUR - UIT ? Math.max(0, (DUUR - t) / UIT) : 1);
+    if (t < DUUR) raf = requestAnimationFrame(frame); else { ctx.clearRect(0, 0, W, H); bezig = false; }
+  }
+  async function speel() {
+    if (bezig) return; bezig = true;
+    await laadAlles(imgs);
+    maat(); maak(); geluid.zoef();
+    start = vorige = performance.now(); raf = requestAnimationFrame(frame);
+  }
+  addEventListener("resize", () => { if (bezig) maat(); });
+  return { speel };
+})();
+
+(() => {
+  let al = false; try { al = sessionStorage.getItem("bes-intro") === "1"; sessionStorage.setItem("bes-intro", "1"); } catch (e) {}
+  if (!al && !rustig) regen.speel();
+  let buf = "";
+  addEventListener("keydown", e => {
+    if (e.target.closest && e.target.closest("input, textarea")) return;
+    buf = (buf + (e.key || "").toLowerCase()).slice(-3);
+    if (buf === "bes") { buf = ""; regen.speel(); toast("Bessenregen!"); }
+  });
+  let tikken = [];
+  $("#logo").addEventListener("click", () => {
+    const nu = Date.now(); tikken = tikken.filter(t => nu - t < 1500); tikken.push(nu);
+    if (tikken.length >= 5) { tikken = []; regen.speel(); toast("Bessenregen!"); }
+    else scrollTo({ top: 0, behavior: rustig ? "auto" : "smooth" });
+  });
+})();
+
+/* =====================================================================
+   HET KRAAMPJE. Dag en nacht volgen de klok; tik op de zon of maan om te wisselen.
+   ===================================================================== */
+(() => {
+  const scene = $("#scene"), knop = $("#dagnacht");
+  const KLEIN = [[175, "knipoog"], [245, "tong"], [315, "lach"], [685, "verlegen"], [755, "cool"], [825, "hartjes"]];
+  const ZINNEN_HOOFD = ["Verse bessen! Wie wil er een bakje?", "Twee knikkers per bakje!", "Ik ben de baas van dit kraampje.", "Kietel me niet, haha!", "Weet jij de geheime code?", "Proef maar, ze zijn zoet!"];
+  const ZINNEN_NACHT = ["Pssst... het kraampje is dicht.", "Zzz... morgen weer open.", "Ik droom van knikkers..."];
+  const ZINNEN_KLEIN = ["Hihi!", "Pak mij!", "Ik ben de lekkerste!", "Boing!", "Kies mij!", "Niet knijpen!", "Wiehoe!"];
+  const uur = new Date().getHours();
+  let nacht = uur < 7 || uur >= 20;
+
+  let sterren = "";
+  for (let k = 0; k < 34; k++) { const x = (k * 137) % 1000, y = (k * 71) % 220 + 10; sterren += `<path d="${ster(x, y, 5 + (k % 3) * 2, 2.2)}" fill="#FFF6C8"/>`; }
+  let strepen = "";
+  for (let k = 0; k < 10; k++) strepen += `<path d="M${150 + k * 70} 236 h70 v36 q-35 24 -70 0z" fill="${k % 2 ? "#FFFDF6" : "#3346A8"}" stroke="#121633" stroke-width="4"/>`;
+
+  function figuurHTML(id, cx, cy, w, kleur, gezicht, hoed = "geen") {
+    const h = w * VB.h / VB.w, x = cx - w / 2, y = cy - h * (-VB.y) / VB.h;
+    return `<g class="figuur" data-id="${id}" role="button" tabindex="0" aria-label="${id === "hoofd" ? "De Blauwe Bes" : "Kleine bes"}">${besSVG({ kleur, gezicht, hoed, w, x, y })}</g>`;
+  }
+  function bouw() {
+    scene.classList.toggle("nacht", nacht);
+    const hoofdGezicht = nacht ? "slaperig" : "blij";
+    scene.innerHTML = `
+      <svg class="decor" viewBox="0 0 1000 600" role="img" aria-label="Het kraampje van de Blauwe Bes op de markt">
+        <rect class="lucht" width="1000" height="600"/>
+        <g class="sterren">${sterren}</g>
+        <circle class="zon" id="zon" cx="880" cy="95" r="48"><title>Tik om dag of nacht te maken</title></circle>
+        <circle class="maanhap" cx="902" cy="80" r="44"/>
+        <rect class="grond" y="500" width="1000" height="100"/>
+        <path d="M0 500 H1000" stroke="#121633" stroke-width="4"/>
+        <rect x="160" y="262" width="14" height="240" fill="#8A5A34" stroke="#121633" stroke-width="3"/>
+        <rect x="826" y="262" width="14" height="240" fill="#8A5A34" stroke="#121633" stroke-width="3"/>
+        <path d="M120 238 L500 96 L880 238 Z" fill="#3346A8" stroke="#121633" stroke-width="4" stroke-linejoin="round"/>
+        <text x="500" y="172" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-size="22" fill="#FFE27A" letter-spacing="1">DE BLAUWE BES</text>
+        ${strepen}
+        <circle class="gloed" cx="500" cy="300" r="120" fill="url(#lampgloed)"/>
+        <defs><radialGradient id="lampgloed"><stop offset="0" stop-color="#FFE38A" stop-opacity=".9"/><stop offset="1" stop-color="#FFE38A" stop-opacity="0"/></radialGradient></defs>
+        <path d="M500 272 v16" stroke="#121633" stroke-width="3"/>
+        <circle class="peer" cx="500" cy="300" r="13" stroke="#121633" stroke-width="3"/>
+        ${figuurHTML("hoofd", 500, 352, 190, "blauw", hoofdGezicht, "koks")}
+        <rect x="140" y="420" width="720" height="84" fill="#B07A4A" stroke="#121633" stroke-width="5"/>
+        <rect x="400" y="436" width="200" height="52" rx="6" fill="#FFFDF6" stroke="#121633" stroke-width="3"/>
+        <text x="500" y="472" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-size="26" fill="#3346A8">2 KNIKKERS</text>
+        ${KLEIN.map(([x, g], i) => figuurHTML("klein" + i, x, 390, 66, i % 3 === 1 ? "nacht" : "blauw", nacht ? "slaperig" : g)).join("")}
+      </svg>
+      <div class="wolk praat links" id="sceneWolk"></div>`;
+    knop.textContent = nacht ? "Maak het dag" : "Maak het nacht";
+    $("#klokTip").textContent = nacht ? "Het is avond, dus het kraampje is dicht. De bessen slapen." : "Het kraampje is open!";
+  }
+  function zeg(tekst, cx, cy, kant) {
+    const w = $("#sceneWolk");
+    w.className = "wolk praat " + kant; w.textContent = tekst;
+    const box = scene.getBoundingClientRect(), s = box.width / 1000;
+    w.style.left = "0px"; w.style.top = "0px";
+    requestAnimationFrame(() => {
+      const bw = w.offsetWidth, bh = w.offsetHeight;
+      let left = kant === "links" ? cx * s - bw * .2 : cx * s - bw * .8;
+      left = Math.max(6, Math.min(box.width - bw - 6, left));
+      w.style.left = left + "px"; w.style.top = Math.max(6, cy * s - bh - 26) + "px";
+      w.style.setProperty("--ox", kant === "links" ? "20%" : "80%");
+      w.classList.remove("zichtbaar"); void w.offsetWidth; w.classList.add("zichtbaar");
+      clearTimeout(zeg.t); zeg.t = setTimeout(() => w.classList.remove("zichtbaar"), 2600);
+    });
+  }
+  function tik(g) {
+    const id = g.dataset.id;
+    g.classList.remove("hop"); void g.getBBox(); g.classList.add("hop");
+    if (id === "hoofd") {
+      geluid.plop(); zeg(kies(nacht ? ZINNEN_NACHT : ZINNEN_HOOFD), 500, 262, "links");
+    } else {
+      const i = +id.replace("klein", ""), [x] = KLEIN[i];
+      const nieuw = nacht ? "verbaasd" : kies(Object.keys(GEZICHTEN).filter(f => f !== "sip" && f !== "slaperig"));
+      const kleur = i % 3 === 1 ? "nacht" : "blauw";
+      g.innerHTML = besSVG({ kleur, gezicht: nieuw, w: 66, x: x - 33, y: 390 - 66 * VB.h / VB.w * (-VB.y) / VB.h });
+      geluid.giechel(); zeg(nacht ? "Huh? Is het al ochtend?" : kies(ZINNEN_KLEIN), x, 340, x < 500 ? "links" : "rechts");
+    }
+  }
+  scene.addEventListener("click", e => {
+    if (e.target.closest("#zon")) { wissel(); return; }
+    const g = e.target.closest(".figuur"); if (g) tik(g);
+  });
+  scene.addEventListener("keydown", e => { const g = e.target.closest(".figuur"); if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); tik(g); } });
+  function wissel() { nacht = !nacht; geluid.zoef(); bouw(); }
+  knop.addEventListener("click", wissel);
+  bouw();
+})();
+
+/* =====================================================================
+   DE STRIP. Straks: elk plaatje is een foto van de echte tekening (veld "foto").
+   Positie van wolken in procenten: x = vanaf links, y = vanaf boven.
+   ===================================================================== */
+(() => {
+  const STRIP = [
+    { lucht: "#BFE3FF", wie: [["bes", 50, 52, "blij"]], wolken: [
+      { soort: "kader", x: 3, y: 4, tekst: "Op de markt staat een klein kraampje..." },
+      { soort: "praat", kant: "links", x: 52, y: 10, tekst: "Verse bessen! Wie wil er een bakje?" } ]},
+    { lucht: "#BFE3FF", wie: [["bes", 36, 52, "blij"], ["aardbei", 76, 47, "blij"]], wolken: [
+      { soort: "praat", kant: "rechts", x: 52, y: 8, tekst: "Hoi Bes! Hoeveel kost een bakje?" },
+      { soort: "praat", kant: "links", x: 6, y: 12, tekst: "Twee knikkers!" } ]},
+    { lucht: "#BFE3FF", wie: [["bes", 36, 52, "blij"], ["aardbei", 76, 47, "sip"]], wolken: [
+      { soort: "denk", x: 54, y: 6, tekst: "Oei... ik heb maar één knikker." },
+      { soort: "praat", kant: "links", x: 6, y: 14, tekst: "Waarom kijk je zo sip?" } ]},
+    { lucht: "#FFE9A8", feest: true, wie: [["bes", 34, 52, "lach"], ["aardbei", 72, 47, "lach"]], wolken: [
+      { soort: "praat", kant: "links", x: 4, y: 8, tekst: "Weet je wat? Voor jou vandaag gratis!" },
+      { soort: "roep", x: 50, y: 4, tekst: "JIPPIE!" },
+      { soort: "kader", x: 3, y: 80, tekst: "Wordt vervolgd..." } ]}
+  ];
+  const AARDBEI_GEZICHT = { blij: "blij", sip: "sip", lach: "lach" };
+  function aardbei(x, y, g) {
+    const r = 62; let pit = "";
+    [[-52, -12], [52, -12], [-48, 22], [48, 22], [-30, 52], [30, 52], [0, 66]].forEach(([dx, dy]) => pit += `<ellipse cx="${x + dx}" cy="${y + dy}" rx="3" ry="5" fill="#FFE27A"/>`);
+    return `<path d="M${x} ${y + r * 1.25} C ${x - r * 1.6} ${y + r * .2}, ${x - r * 1.1} ${y - r * 1.05}, ${x} ${y - r * .75} C ${x + r * 1.1} ${y - r * 1.05}, ${x + r * 1.6} ${y + r * .2}, ${x} ${y + r * 1.25}Z" fill="#E8445A" stroke="#121633" stroke-width="5"/>${pit}
+      <path d="M${x - 36} ${y - r * .78} q18 -22 36 -6 q18 -16 36 6 q-14 10 -36 4 q-22 6 -36 -4z" fill="#4E9A3A" stroke="#121633" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M${x} ${y - r * .95} v-18" stroke="#121633" stroke-width="5" stroke-linecap="round"/>
+      <g transform="translate(${x} ${y + 6}) scale(1.15)">${GEZICHTEN[AARDBEI_GEZICHT[g]].svg}</g>`;
+  }
+  function plaatje(p) {
+    const W = 800, H = 600, px = v => v / 100 * W, py = v => v / 100 * H;
+    let strepen = ""; for (let k = 0; k < 8; k++) strepen += `<path d="M${120 + k * 70} 250 h70 v34 q-35 22 -70 0z" fill="${k % 2 ? "#FFFDF6" : "#3346A8"}" stroke="#121633" stroke-width="4"/>`;
+    let confetti = ""; if (p.feest) for (let k = 0; k < 40; k++) confetti += `<rect x="${(k * 97) % 800}" y="${(k * 53) % 240}" width="10" height="16" rx="2" fill="${["#E8445A", "#3346A8", "#4E9A3A", "#F5A623"][k % 4]}" transform="rotate(${k * 37 % 90} ${(k * 97) % 800} ${(k * 53) % 240})"/>`;
+    const fig = p.wie.map(([wie, x, y, g]) => {
+      if (wie === "aardbei") return aardbei(px(x), py(y), g);
+      const w = 150, h = w * VB.h / VB.w; return besSVG({ gezicht: g, hoed: "koks", w, x: px(x) - w / 2, y: py(y) - h * (-VB.y) / VB.h });
+    }).join("");
+    return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true"><rect width="${W}" height="${H}" fill="${p.lucht}"/>${confetti}
+      <rect y="470" width="${W}" height="130" fill="#C7A27A"/><path d="M0 470 H${W}" stroke="#121633" stroke-width="4"/>
+      <rect x="130" y="270" width="12" height="200" fill="#8A5A34" stroke="#121633" stroke-width="3"/><rect x="658" y="270" width="12" height="200" fill="#8A5A34" stroke="#121633" stroke-width="3"/>
+      <path d="M100 250 L400 180 L700 250 Z" fill="#3346A8" stroke="#121633" stroke-width="4" stroke-linejoin="round"/>${strepen}${fig}
+      <rect x="110" y="390" width="580" height="90" fill="#B07A4A" stroke="#121633" stroke-width="5"/>
+      <rect x="300" y="408" width="200" height="50" rx="6" fill="#FFFDF6" stroke="#121633" stroke-width="3"/>
+      <text x="400" y="442" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-size="26" fill="#3346A8">BESSEN</text></svg>`;
+  }
+  const baan = $("#baan"), vel = $("#vel"), terugK = $("#terug"), verderK = $("#verder"), stippen = $("#stippen");
+  let pagina = 0, wolkNr = 0;
+  baan.innerHTML = STRIP.map((p, i) => `<div class="plaatje" aria-label="Plaatje ${i + 1} van ${STRIP.length}">
+      ${p.foto ? `<img src="${p.foto}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">` : plaatje(p)}
+      ${p.wolken.map((w, j) => `<div class="wolk ${w.soort} ${w.soort === "praat" ? w.kant : ""}" data-p="${i}" data-w="${j}" style="left:${w.x}%;top:${w.y}%;--ox:${w.kant === "rechts" ? "80%" : "20%"}">${w.tekst}${w.soort === "denk" ? "<i></i><i></i>" : ""}</div>`).join("")}
+      <span class="nr">${i + 1}</span></div>`).join("");
+  stippen.innerHTML = STRIP.map((_, i) => `<button type="button" aria-label="Naar plaatje ${i + 1}"></button>`).join("");
+  const wolken = i => baan.querySelectorAll(`.wolk[data-p="${i}"]`);
+  function toon(anim = true) {
+    baan.style.transform = `translateX(${-pagina * 100}%)`;
+    STRIP.forEach((_, i) => wolken(i).forEach((el, j) => {
+      const aan = i < pagina || (i === pagina && j < wolkNr), nieuw = anim && i === pagina && j === wolkNr - 1;
+      el.classList.toggle("al", aan && !nieuw); el.classList.toggle("zichtbaar", aan && nieuw);
+    }));
+    [...stippen.children].forEach((b, i) => b.setAttribute("aria-current", String(i === pagina)));
+    terugK.disabled = pagina === 0 && wolkNr === 0;
+    const laatste = pagina === STRIP.length - 1 && wolkNr === STRIP[pagina].wolken.length;
+    verderK.textContent = laatste ? "Opnieuw ↺" : wolkNr < STRIP[pagina].wolken.length ? "Verder ▶" : "Volgende ▶";
+  }
+  function naar(i) { pagina = i; wolkNr = 0; toon(); setTimeout(() => { if (pagina === i && wolkNr === 0) { wolkNr = 1; geluid.plop(); toon(); } }, 480); }
+  function verder() {
+    if (wolkNr < STRIP[pagina].wolken.length) { wolkNr++; geluid.plop(); toon(); }
+    else if (pagina < STRIP.length - 1) naar(pagina + 1);
+    else naar(0);
+  }
+  function terug() { if (wolkNr > 0) wolkNr--; else if (pagina > 0) { pagina--; wolkNr = STRIP[pagina].wolken.length; } toon(false); }
+  verderK.addEventListener("click", verder); terugK.addEventListener("click", terug);
+  stippen.addEventListener("click", e => { const i = [...stippen.children].indexOf(e.target); if (i >= 0) naar(i); });
+  vel.addEventListener("keydown", e => { if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); verder(); } if (e.key === "ArrowLeft") { e.preventDefault(); terug(); } });
+  let sx = null, sy = null;
+  vel.addEventListener("pointerdown", e => { sx = e.clientX; sy = e.clientY; });
+  vel.addEventListener("pointerup", e => {
+    if (sx === null) return; const dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { if (dx < 0 && pagina < STRIP.length - 1) naar(pagina + 1); else if (dx > 0 && pagina > 0) { pagina--; wolkNr = STRIP[pagina].wolken.length; toon(false); } }
+    else if (Math.abs(dx) < 10 && Math.abs(dy) < 10) verder();
+  });
+  wolkNr = 1; toon(false);
+})();
+
+/* =====================================================================
+   VANG DE BESSEN. 1 speler (3 hartjes) of 2 spelers op één scherm (60 seconden).
+   ===================================================================== */
+(() => {
+  const doek = $("#spelDoek"), ctx = doek.getContext("2d"), menu = $("#spelMenu");
+  const blauw = ["blij", "lach", "knipoog", "tong", "verbaasd", "hartjes", "cool", "verlegen"].map(g => besPlaatje("blauw", g));
+  const goud = besPlaatje("goud", "cool"), rot = besPlaatje("rot", "sip");
+  let W = 800, H = 500, dpr = 1, modus = 1, spelers = [], items = [], plopjes = [], tijd = 0, volgende = 0, raf = 0, loopt = false, vorige = 0;
+  const toetsen = new Set(), vingers = new Map();
+  const RECORD = "bes-record";
+
+  function maat() {
+    const r = doek.getBoundingClientRect(); dpr = Math.min(devicePixelRatio || 1, 2);
+    W = r.width < 600 ? 480 : 800; H = Math.round(W * r.height / r.width);
+    doek.width = r.width * dpr; doek.height = r.height * dpr;
+    ctx.setTransform(r.width * dpr / W, 0, 0, r.width * dpr / W, 0, 0);
+  }
+  function nieuwSpel(m) {
+    modus = m; maat();
+    const mand = (x, kleur, min, max, links, rechts, naam) => ({ x, doel: null, kleur, min, max, links, rechts, naam, punten: 0, levens: 3, w: m === 2 ? 110 : 130 });
+    spelers = m === 1 ? [mand(W / 2, "#3346A8", 0, W, ["arrowleft", "a"], ["arrowright", "d"], "Jij")]
+      : [mand(W / 4, "#3346A8", 0, W / 2, ["a"], ["d"], "Speler 1"), mand(W * 3 / 4, "#E8445A", W / 2, W, ["arrowleft"], ["arrowright"], "Speler 2")];
+    items = []; plopjes = []; tijd = 0; volgende = .4; loopt = true; menu.hidden = true;
+    doek.focus({ preventScroll: true });
+    vorige = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(frame);
+  }
+  function eind() {
+    loopt = false; cancelAnimationFrame(raf);
+    let titel, tekst;
+    if (modus === 1) {
+      const p = spelers[0].punten, oud = +(opslag.get(RECORD) || 0);
+      if (p > oud) { opslag.set(RECORD, String(p)); titel = "Nieuw record!"; tekst = `Je ving ${p} punten. Knap gedaan!`; geluid.tada(); }
+      else { titel = "Op is op!"; tekst = `Je ving ${p} punten. Je record is ${oud}.`; geluid.au(); }
+    } else {
+      const [a, b] = spelers;
+      titel = a.punten === b.punten ? "Gelijkspel!" : (a.punten > b.punten ? "Speler 1 wint!" : "Speler 2 wint!");
+      tekst = `Speler 1: ${a.punten} punten · Speler 2: ${b.punten} punten`; geluid.tada();
+    }
+    $("#menuTitel").textContent = titel; $("#menuTekst").textContent = tekst;
+    $("#start1").textContent = "1 speler opnieuw"; $("#start2").textContent = "2 spelers opnieuw";
+    recordTekst(); menu.hidden = false;
+  }
+  function recordTekst() { const r = +(opslag.get(RECORD) || 0); $("#recordTekst").textContent = r ? `Record op dit apparaat: ${r} punten` : ""; }
+
+  function maakItem() {
+    const kans = Math.random(), r = 26;
+    const soort = kans < .06 ? "goud" : kans < .24 ? "rot" : "bes";
+    items.push({ soort, img: soort === "goud" ? goud : soort === "rot" ? rot : kies(blauw), x: r + Math.random() * (W - 2 * r), y: -r, r, v: Math.min(430, 150 + tijd * 4.2) * (.85 + Math.random() * .3), hoek: 0, draai: (Math.random() - .5) * 3 });
+  }
+  function stap(dt) {
+    tijd += dt;
+    if (modus === 2 && tijd >= 60) return eind();
+    volgende -= dt; if (volgende <= 0) { maakItem(); if (modus === 2 && Math.random() < .5) maakItem(); volgende = Math.max(.32, .9 - tijd * .012); }
+    for (const p of spelers) {
+      let dx = 0; if (p.links.some(k => toetsen.has(k))) dx -= 1; if (p.rechts.some(k => toetsen.has(k))) dx += 1;
+      if (dx) { p.x += dx * 560 * dt; p.doel = null; }
+      else if (p.doel !== null) p.x += (p.doel - p.x) * Math.min(1, dt * 14);
+      p.x = Math.max(p.min + p.w / 2, Math.min(p.max - p.w / 2, p.x));
+    }
+    const mandY = H - 58;
+    for (const it of items) {
+      it.y += it.v * dt; it.hoek += it.draai * dt;
+      if (!it.weg && it.y + it.r * .6 >= mandY && it.y < mandY + 30) {
+        for (const p of spelers) if (Math.abs(it.x - p.x) < p.w / 2) {
+          it.weg = true;
+          if (it.soort === "rot") { if (modus === 1) p.levens--; else p.punten = Math.max(0, p.punten - 3); plopjes.push({ x: it.x, y: mandY - 20, t: 0, tekst: modus === 1 ? "Bah!" : "-3", kleur: "#7A7A40" }); geluid.au(); }
+          else { const w = it.soort === "goud" ? 5 : 1; p.punten += w; plopjes.push({ x: it.x, y: mandY - 20, t: 0, tekst: "+" + w, kleur: it.soort === "goud" ? "#C9970B" : p.kleur }); it.soort === "goud" ? geluid.goud() : geluid.vang(); }
+          break;
+        }
+      }
+    }
+    items = items.filter(it => !it.weg && it.y < H + 40);
+    plopjes.forEach(p => p.t += dt); plopjes = plopjes.filter(p => p.t < .8);
+    if (modus === 1 && spelers[0].levens <= 0) eind();
+  }
+  function mandje(p) {
+    const y = H - 58, w = p.w, h = 46;
+    ctx.save(); ctx.translate(p.x, y);
+    ctx.fillStyle = "#C98A4B"; ctx.strokeStyle = "#121633"; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(-w / 2, 0); ctx.lineTo(w / 2, 0); ctx.lineTo(w / 2 - 14, h); ctx.lineTo(-w / 2 + 14, h); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = "rgba(18,22,51,.35)"; ctx.lineWidth = 2;
+    for (let i = 1; i < 3; i++) { ctx.beginPath(); ctx.moveTo(-w / 2 + i * 4.5, i * 15); ctx.lineTo(w / 2 - i * 4.5, i * 15); ctx.stroke(); }
+    for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(i * w / 6, 0); ctx.lineTo(i * w / 7.5, h); ctx.stroke(); }
+    ctx.fillStyle = p.kleur; ctx.strokeStyle = "#121633"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-w / 2 - 4, -8, w + 8, 12, 6) : ctx.rect(-w / 2 - 4, -8, w + 8, 12); ctx.fill(); ctx.stroke();
+    if (modus === 2) { ctx.fillStyle = "#fff"; ctx.font = "900 18px Arial Black, sans-serif"; ctx.textAlign = "center"; ctx.fillText(p.naam === "Speler 1" ? "1" : "2", 0, 30); }
+    ctx.restore();
+  }
+  function teken() {
+    const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#BFE3FF"); g.addColorStop(1, "#E8F4FF");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#C7A27A"; ctx.fillRect(0, H - 14, W, 14);
+    if (modus === 2) { ctx.setLineDash([10, 10]); ctx.strokeStyle = "rgba(18,22,51,.3)"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H); ctx.stroke(); ctx.setLineDash([]); }
+    for (const it of items) {
+      if (!klaar(it.img)) continue;
+      const s = it.r * 2 * VB.w / 104, hh = s * VB.h / VB.w;
+      ctx.save(); ctx.translate(it.x, it.y); ctx.rotate(it.hoek); ctx.drawImage(it.img, -s / 2, -hh * (-VB.y) / VB.h, s, hh); ctx.restore();
+    }
+    spelers.forEach(mandje);
+    for (const p of plopjes) { ctx.globalAlpha = 1 - p.t / .8; ctx.fillStyle = p.kleur; ctx.font = "900 26px Arial Black, sans-serif"; ctx.textAlign = "center"; ctx.fillText(p.tekst, p.x, p.y - p.t * 50); ctx.globalAlpha = 1; }
+    // scorebord
+    ctx.font = "900 24px Arial Black, sans-serif"; ctx.textBaseline = "top"; ctx.lineWidth = 5; ctx.strokeStyle = "#fff";
+    const tekst = (t, x, al, kleur) => { ctx.textAlign = al; ctx.strokeText(t, x, 14); ctx.fillStyle = kleur; ctx.fillText(t, x, 14); };
+    if (modus === 1) {
+      tekst(`${spelers[0].punten} punten`, 16, "left", "#121633");
+      for (let i = 0; i < 3; i++) { ctx.save(); ctx.translate(W - 30 - i * 34, 26); ctx.scale(1.25, 1.25); ctx.fillStyle = i < spelers[0].levens ? "#E8445A" : "rgba(18,22,51,.2)";
+        ctx.beginPath(); ctx.moveTo(0, 8); ctx.bezierCurveTo(-13, -1, -7, -12, 0, -4); ctx.bezierCurveTo(7, -12, 13, -1, 0, 8); ctx.fill(); ctx.restore(); }
+    } else {
+      tekst(`1: ${spelers[0].punten}`, 16, "left", "#3346A8");
+      tekst(`2: ${spelers[1].punten}`, W - 16, "right", "#E8445A");
+      tekst(`${Math.max(0, Math.ceil(60 - tijd))}`, W / 2, "center", "#121633");
+    }
+    ctx.textBaseline = "alphabetic";
+  }
+  function frame(nu) {
+    const dt = Math.min(.033, (nu - vorige) / 1000); vorige = nu;
+    stap(dt); teken();
+    if (loopt) raf = requestAnimationFrame(frame);
+  }
+  // besturing
+  doek.tabIndex = 0;
+  addEventListener("keydown", e => { if (!loopt) return; const k = e.key.toLowerCase(); if (["arrowleft", "arrowright", "a", "d"].includes(k)) { e.preventDefault(); toetsen.add(k); } });
+  addEventListener("keyup", e => toetsen.delete(e.key.toLowerCase()));
+  addEventListener("blur", () => toetsen.clear());
+  function wijs(e) {
+    if (!loopt) return;
+    const r = doek.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * W;
+    const p = modus === 1 ? spelers[0] : (x < W / 2 ? spelers[0] : spelers[1]);
+    p.doel = x;
+  }
+  doek.addEventListener("pointerdown", e => { doek.setPointerCapture?.(e.pointerId); wijs(e); });
+  doek.addEventListener("pointermove", e => { if (e.pointerType === "mouse" || e.buttons || e.pressure) wijs(e); });
+  document.addEventListener("visibilitychange", () => { if (document.hidden && loopt) { loopt = false; cancelAnimationFrame(raf); $("#menuTitel").textContent = "Gepauzeerd"; $("#menuTekst").textContent = "Kies hieronder om een nieuw spel te beginnen."; menu.hidden = false; } });
+  addEventListener("resize", () => { if (loopt) { const oudW = W; maat(); } else { maat(); teken(); } });
+  $("#start1").addEventListener("click", () => nieuwSpel(1));
+  $("#start2").addEventListener("click", () => nieuwSpel(2));
+  recordTekst();
+  // stilstaand voorbeeld achter het menu
+  laadAlles([...blauw, goud, rot]).then(() => {
+    maat(); spelers = [{ x: W / 2, w: 130, kleur: "#3346A8", punten: 0, levens: 3 }]; modus = 1;
+    items = [[160, 120, "bes"], [330, 230, "goud"], [520, 90, "bes"], [640, 260, "rot"], [260, 330, "bes"]].map(([x, y, s]) => ({ x: x * W / 800, y, r: 26, hoek: 0, img: s === "goud" ? goud : s === "rot" ? rot : kies(blauw) }));
+    teken(); items = [];
+  });
+})();
+
+/* =====================================================================
+   BESSENMAKER. Keuzes worden op dit apparaat onthouden; de naam niet.
+   ===================================================================== */
+(() => {
+  const vorm = $("#makerForm"), beeld = $("#makerBeeld"), bord = $("#naambord"), naamVeld = $("#naam");
+  let keuze = { kleur: "blauw", gezicht: "blij", hoed: "kroon" };
+  try { Object.assign(keuze, JSON.parse(opslag.get("bes-maker") || "{}")); } catch (e) {}
+  if (!KLEUREN[keuze.kleur] || !GEZICHTEN[keuze.gezicht] || !HOEDEN[keuze.hoed]) keuze = { kleur: "blauw", gezicht: "blij", hoed: "kroon" };
+  const radio = (groep, waarde, inhoud, label) => `<label><input type="radio" name="${groep}" value="${waarde}" id="${groep}-${waarde}"><span class="chip" title="${label}">${inhoud}<span>${label}</span></span></label>`;
+  $("#kiesKleur").innerHTML = MAKERKLEUREN.map(k => radio("kleur", k, `<span class="kleur-bol" style="background:radial-gradient(circle at 35% 30%, ${KLEUREN[k].c[0]}, ${KLEUREN[k].c[1]} 60%, ${KLEUREN[k].c[2]})"></span>`, KLEUREN[k].naam)).join("");
+  $("#kiesGezicht").innerHTML = Object.keys(GEZICHTEN).map(g => radio("gezicht", g, besSVG({ gezicht: g }), GEZICHTEN[g].naam)).join("");
+  $("#kiesHoed").innerHTML = Object.keys(HOEDEN).map(h => radio("hoed", h, besSVG({ hoed: h, gezicht: "blij" }), HOEDEN[h].naam)).join("");
+  function toon() {
+    for (const g of ["kleur", "gezicht", "hoed"]) { const el = vorm.querySelector(`input[name="${g}"][value="${keuze[g]}"]`); if (el) el.checked = true; }
+    beeld.innerHTML = besSVG(keuze);
+    bord.textContent = naamVeld.value.trim() || "Naamloos";
+    opslag.set("bes-maker", JSON.stringify(keuze));
+  }
+  vorm.addEventListener("change", e => { if (e.target.name in keuze) { keuze[e.target.name] = e.target.value; geluid.plop(); toon(); } });
+  naamVeld.addEventListener("input", () => { bord.textContent = naamVeld.value.trim() || "Naamloos"; });
+  vorm.addEventListener("submit", e => e.preventDefault());
+  $("#verras").addEventListener("click", () => {
+    keuze = { kleur: kies(MAKERKLEUREN), gezicht: kies(Object.keys(GEZICHTEN)), hoed: kies(Object.keys(HOEDEN)) };
+    naamVeld.value = kies(["Bessie", "Blauwtje", "Kroontje", "Bolletje", "Knikker", "Sap", "Bram Bes", "Bo"]);
+    geluid.giechel(); toon();
+    const g = beeld.firstElementChild; if (g && !rustig) g.animate([{ transform: "scale(.7) rotate(-10deg)" }, { transform: "scale(1.08) rotate(4deg)" }, { transform: "scale(1)" }], { duration: 450, easing: "cubic-bezier(.3,1.5,.5,1)" });
+  });
+  $("#bewaar").addEventListener("click", () => {
+    const naam = naamVeld.value.trim() || "Mijn bes";
+    const S = 600, c = document.createElement("canvas"); c.width = S; c.height = S + 120;
+    const x = c.getContext("2d");
+    x.fillStyle = "#EAF1FF"; x.fillRect(0, 0, c.width, c.height);
+    const img = new Image();
+    img.onload = () => {
+      x.drawImage(img, 90, 30, 420, 420 * VB.h / VB.w);
+      x.fillStyle = "#FFE27A"; x.strokeStyle = "#121633"; x.lineWidth = 6;
+      x.font = "900 46px Arial Black, sans-serif"; x.textAlign = "center";
+      const bw = Math.min(560, x.measureText(naam).width + 60);
+      x.fillRect(S / 2 - bw / 2, S + 10, bw, 74); x.strokeRect(S / 2 - bw / 2, S + 10, bw, 74);
+      x.fillStyle = "#121633"; x.fillText(naam, S / 2, S + 64);
+      c.toBlob(b => {
+        if (!b) { toast("Opslaan lukt hier niet"); return; }
+        const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = naam.replace(/[^\w\- ]+/g, "").trim().replace(/\s+/g, "-").toLowerCase() + "-bes.png";
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+        toast("Plaatje bewaard"); geluid.tada();
+      }, "image/png");
+    };
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(besSVG({ ...keuze, w: 420 }));
+  });
+  toon();
+})();
+</script>
+
+</body>
+</html>
